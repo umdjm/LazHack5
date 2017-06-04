@@ -2,26 +2,16 @@
   <div class="sidebar">
 
     <div class="slack-name">
-      <h2>FireSlack</h2>
+      <h2>Laz Hack 5 - Fantasy Football</h2>
     </div>
 
     <div class="channel-list">
-      <div class="list-head">Channels</div>
-      <div class="channel" ng-repeat="channel in channelsCtrl.channels">
-        <a ui-sref="channels.messages({channelId: channel.$id})" ui-sref-active="selected"># {{ channel.name }}</a>
+      <div class="list-head">Menu</div>
+      <div class="channel">
+        <a ui-sref="channels.players()" ui-sref-active="selected"> Players </a>
+        <a ui-sref="channels.scoring()" ui-sref-active="selected"> Scoring Settings </a>
       </div>
 
-      <div class="channel create">
-        <a ui-sref="channels.create">+ create channel</a>
-      </div>
-
-      <div class="list-head">Direct Messages</div>
-      <div class="channel" ng-repeat="user in channelsCtrl.users">
-        <a ng-if="user.$id !== channelsCtrl.profile.$id" ui-sref="channels.direct({uid: user.$id})" ui-sref-active="selected">
-          <span class="presence" ng-class="{online: user.online}"></span>
-          {{ user.displayName }}
-        </a>
-      </div>
     </div>
 
     <div class="my-info">

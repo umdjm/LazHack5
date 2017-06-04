@@ -3,7 +3,8 @@ angular
   .module('lazHack5', [
     'firebase',
     'angular-md5',
-    'ui.router'
+    'ui.router',
+    'ngMaterial'
   ])
   .config(function ($stateProvider, $urlRouterProvider) {
     $stateProvider
@@ -70,9 +71,6 @@ angular
         controller: 'ChannelsCtrl as channelsCtrl',
         templateUrl: 'channels/index.html',
         resolve: {
-          channels: function (Channels){
-            return Channels.$loaded();
-          },
           profile: function ($state, Auth, Users){
             return Auth.$requireSignIn().then(function(auth){
               return Users.getProfile(auth.uid).$loaded().then(function (profile){
@@ -88,36 +86,44 @@ angular
           }
         }
       })
-      .state('channels.create', {
-        url: '/create',
-        templateUrl: 'channels/create.html',
-        controller: 'ChannelsCtrl as channelsCtrl'
-      })
-      .state('channels.messages', {
-        url: '/{channelId}/messages',
-        templateUrl: 'channels/messages.html',
-        controller: 'MessagesCtrl as messagesCtrl',
+      .state('channels.players', {
+        url: '/players',
+        templateUrl: 'players/players.html',
+        controller: 'PlayersCtrl as playersCtrl',
         resolve: {
-          messages: function($stateParams, Messages){
-            return Messages.forChannel($stateParams.channelId).$loaded();
+          scoring: function(Players){
+            return Players.scoring.$loaded();
           },
-          channelName: function($stateParams, channels){
-            return '#'+channels.$getRecord($stateParams.channelId).name;
+          players: function(Players){
+            return Players.players.$loaded();
           }
         }
       })
-      .state('channels.direct', {
-        url: '/{uid}/messages/direct',
-        templateUrl: 'channels/messages.html',
-        controller: 'MessagesCtrl as messagesCtrl',
+      .state('channels.editPlayer', {
+        url: '/players/{playerId}',
+        templateUrl: 'players/player.html',
+        controller: 'PlayerCtrl as playerCtrl',
         resolve: {
-          messages: function($stateParams, Messages, profile){
-            return Messages.forUsers($stateParams.uid, profile.$id).$loaded();
+          scoring: function(Players){
+            return Players.scoring.$loaded();
           },
-          channelName: function($stateParams, Users){
-            return Users.all.$loaded().then(function(){
-              return '@'+Users.getDisplayName($stateParams.uid);
+          players: function($stateParams, Players){
+            return Players.players.$loaded();
+          },
+          player: function($stateParams, Players){
+            return Players.players.$loaded().then(function(players){
+              return players[$stateParams.playerId];
             });
+          }
+        }
+      })
+      .state('channels.scoring', {
+        url: '/scoring',
+        templateUrl: 'scoring/scoring.html',
+        controller: 'ScoringCtrl as scoringCtrl',
+        resolve: {
+          scoring: function(Players){
+            return Players.scoring.$loaded();
           }
         }
       });
