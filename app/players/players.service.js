@@ -25,8 +25,8 @@ angular.module('lazHack5')
 
     var starters = {
       "QB" : 12,
-      "RB" : 24,
-      "WR" : 24,
+      "RB" : 30,
+      "WR" : 30,
       "TE" : 12
     };
     function computeVORP(player, replacementPlayer){
